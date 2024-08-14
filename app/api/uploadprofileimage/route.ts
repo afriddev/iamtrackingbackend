@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         await user.updateOne(
           { emailId },
           {
-            $set: { iamgeUrl: url },
+            $set: { imageUrl: url },
           }
         );
         return NextResponse.json({
