@@ -27,7 +27,12 @@ const userModel = new Schema({
   todayDate: Number,
   lastUpdatedDate: Number,
   monthLimitAmount: Number,
-  todaySpends: [Number],
+  todaySpends: [{
+    id:String,
+    amount:Number,
+    date:String,
+    response:String
+  }],
   balance: Number,
   totalSpend:Number,
   dailyLimit:Number,
