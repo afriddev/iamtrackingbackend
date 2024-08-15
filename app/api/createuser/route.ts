@@ -45,7 +45,8 @@ export async function POST(req: Request) {
           totalSpend: 0,
           dailyLimit:0,
           totalSaved:0,
-          imageUrl:""
+          imageUrl:"",
+          monthlySpends:[]
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,

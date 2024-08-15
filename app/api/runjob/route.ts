@@ -1,15 +1,18 @@
 import {
   AMOUNT_UPDATED,
+  DAILY_LIMIT_EXCEED_ERROR,
   EMAIL_ID_PROVIDE_ERROR,
   JOB_RUNNED,
   MONGO_DB_ERROR,
   NO_USER_FOUND_ERROR,
+  REQUEST_SUCCESS,
   SET_MONTH_AMOUNT_ERROR,
 } from "@/app/errors/errorMessages";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { userType } from "@/app/types/userTypes";
 import { getTodayDate } from "@/app/utils/utils";
+import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -28,7 +31,7 @@ export async function POST(req: Request) {
               index < userData?.todaySpends?.length;
               index++
             ) {
-              totalSpend = totalSpend + userData?.todaySpends[index];
+              totalSpend = totalSpend + userData?.todaySpends[index]?.amount;
             }
             await user.updateOne(
               { emailId },
@@ -38,7 +41,18 @@ export async function POST(req: Request) {
                   lastUpdatedDate: getTodayDate(),
                   totalSpend,
                   todaySpends: [],
-                  totalSaved:userData?.dailyLimit - totalSpend
+                  totalSaved: userData?.dailyLimit - totalSpend,
+                },
+                $push: {
+                  monthlySpends: {
+                    amount: parseInt(totalSpend as never),
+                    id: new Date().getTime()?.toString(),
+                    response:
+                      totalSpend <= userData?.dailyLimit
+                        ? REQUEST_SUCCESS
+                        : DAILY_LIMIT_EXCEED_ERROR,
+                    date: format(new Date(), "dd-MM-yyyy")?.toString(),
+                  },
                 },
               }
             );
@@ -60,7 +74,8 @@ export async function POST(req: Request) {
           message: NO_USER_FOUND_ERROR,
         });
       }
-    } catch {
+    } catch(e){
+      console.log(e)
       return NextResponse.json({
         message: MONGO_DB_ERROR,
       });

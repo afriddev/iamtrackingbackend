@@ -37,7 +37,13 @@ const userModel = new Schema({
   totalSpend:Number,
   dailyLimit:Number,
   totalSaved:Number,
-  imageUrl:String
+  imageUrl:String,
+  monthlySpends: [{
+    id:String,
+    amount:Number,
+    date:String,
+    response:String
+  }]
 });
 const user = models.users || mongoose.model("users", userModel);
 export default user;
