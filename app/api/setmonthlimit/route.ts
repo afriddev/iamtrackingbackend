@@ -27,7 +27,10 @@ export async function POST(req: Request) {
               todayDate: getTodayDate(),
               lastUpdatedDate: getTodayDate(),
               monthLimitAmount: amount,
-              balance: amount,dailyLimit:amount / daysInThisMonth() - getTodayDate() 
+              balance: amount,
+              dailyLimit: Math.floor(
+                amount / daysInThisMonth() - getTodayDate()
+              ),
             },
           }
         );
