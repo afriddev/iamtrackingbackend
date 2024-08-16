@@ -44,7 +44,7 @@ export async function POST(req: Request) {
                     ? REQUEST_SUCCESS
                     : DAILY_LIMIT_EXCEED_ERROR,
                   date: format(new Date(), "dd-MM-yyyy"),
-                  type:type === "GROCERY"?"Grocery":"Normal"
+                  type:type === "GROCERY"?"Grocery".toString():"Normal".toString()
                 },
               },
             }
@@ -77,7 +77,8 @@ export async function POST(req: Request) {
         });
       }
     }
-  } catch {
+  } catch(e) {
+    console.log(e)
     return NextResponse.json({
       message: MONGO_DB_ERROR,
     });

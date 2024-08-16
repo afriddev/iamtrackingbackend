@@ -32,7 +32,7 @@ const userModel = new Schema({
     amount:Number,
     date:String,
     response:String,
-    type:String
+    type:{type:String}
   }],
   balance: Number,
   totalSpend:Number,
