@@ -16,7 +16,7 @@ import { NextResponse } from "next/server";
 import { format } from "date-fns";
 
 export async function POST(req: Request) {
-  const { amount, emailId } = await req.json();
+  const { amount, emailId,type } = await req.json();
   try {
     await connectUsersDB();
     if (emailId && amount > 0) {
@@ -44,6 +44,7 @@ export async function POST(req: Request) {
                     ? REQUEST_SUCCESS
                     : DAILY_LIMIT_EXCEED_ERROR,
                   date: format(new Date(), "dd-MM-yyyy"),
+                  type:type === "GROCERY"?"Grocery":"Normal"
                 },
               },
             }

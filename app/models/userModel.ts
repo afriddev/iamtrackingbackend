@@ -31,7 +31,8 @@ const userModel = new Schema({
     id:String,
     amount:Number,
     date:String,
-    response:String
+    response:String,
+    type:String
   }],
   balance: Number,
   totalSpend:Number,

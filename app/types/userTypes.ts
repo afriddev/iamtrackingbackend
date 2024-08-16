@@ -7,7 +7,7 @@ export type userType = {
   todayDate: number;
   lastUpdatedDate: number;
   monthLimitAmount: number;
-  todaySpends: {id:string,amount:number,response:string,date:string}[];
+  todaySpends: {id:string,amount:number,response:string,date:string,type:"Grocery" | "Normal"}[];
   balance: number;
   totalSpend:number;
   dailyLimit:number;
