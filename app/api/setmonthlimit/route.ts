@@ -29,7 +29,7 @@ export async function POST(req: Request) {
               monthLimitAmount: amount,
               balance: amount,
               dailyLimit: Math.floor(
-                amount / daysInThisMonth() - getTodayDate()
+                amount / (daysInThisMonth() - getTodayDate())
               ),
             },
           }
