@@ -25,11 +25,9 @@ export async function POST(req: Request) {
         if (userData?.monthLimitAmount > 0) {
           let totalSpend = amount;
           for (let index = 0; index < userData?.todaySpends?.length; index++) {
-            totalSpend = totalSpend + userData?.todaySpends[index];
+            totalSpend = totalSpend + userData?.todaySpends[index]?.amount;
           }
-          const inTheLimit =
-            userData?.monthLimitAmount / (daysInThisMonth() - getTodayDate()) >
-            totalSpend;
+          const inTheLimit = userData?.dailyLimit >= totalSpend;
           await user.updateOne(
             { emailId },
             {
