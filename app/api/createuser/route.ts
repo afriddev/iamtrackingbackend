@@ -26,7 +26,7 @@ async function checkJson(req: any) {
 
 export async function POST(req: Request) {
   const requestJson = await req.json();
-  const { emailId, password, firstName, lastName } = requestJson;
+  const { emailId, password, firstName, lastName, mobileNumber } = requestJson;
   if ((await checkJson(requestJson)) === "SUCCESS") {
     try {
       await connectUsersDB();
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
           totalSaved: 0,
           imageUrl: "",
           monthlySpends: [],
+          mobileNumber: mobileNumber ?? "",
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,
