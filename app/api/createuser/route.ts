@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       if (!userData) {
         await user.create({
           firstName,
-          lastName :lastName ?? "",
+          lastName: lastName ?? "",
           emailId,
           password,
           todayDate: getTodayDate(),
@@ -43,19 +43,18 @@ export async function POST(req: Request) {
           todaySpends: [],
           balance: 0,
           totalSpend: 0,
-          dailyLimit:0,
-          totalSaved:0,
-          imageUrl:"",
-          monthlySpends:[]
+          dailyLimit: 0,
+          totalSaved: 0,
+          imageUrl: "",
+          monthlySpends: [],
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,
         });
-      }
-      else{
+      } else {
         return NextResponse.json({
-            message:USER_EXISTS_ERROR
-        })
+          message: USER_EXISTS_ERROR,
+        });
       }
     } catch {
       return NextResponse.json({
