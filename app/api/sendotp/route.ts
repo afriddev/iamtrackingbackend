@@ -23,11 +23,11 @@ export async function POST(req: Request) {
           method: "POST",
           body: JSON.stringify({
             toEmail: emailId,
-            body: `Your Verification Code For ${
-              method === "LOGIN" ? "Login" : "Sign Up"
+            body: `Your verification code for ${
+              method === "LOGIN" ? "Login" : "Sign up"
             } ${otp}`,
             title: "Track me ",
-            subject:`Otp For ${method === "LOGIN" ? "Login" : "Sign Up"}`,
+            subject:`Otp for ${method === "LOGIN" ? "Login" : "Sign Up"}`,
           }),
         });
         const result = await response.json();
