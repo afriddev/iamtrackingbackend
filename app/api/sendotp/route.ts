@@ -26,9 +26,12 @@ export async function POST(req: Request) {
             body: `Your Verification Code For ${
               method === "LOGIN" ? "Login" : "Sign Up"
             } ${otp}`,
+            title: "Track me ",
+            subject:`Otp For ${method === "LOGIN" ? "Login" : "Sign Up"}`,
           }),
         });
         const result = await response.json();
+        console.log(result, emailId);
 
         return NextResponse.json({
           message:
