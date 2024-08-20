@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           firstName,
           lastName: lastName ?? "",
           emailId,
-          password,
+          password:btoa(password),
           todayDate: getTodayDate(),
           lastUpdatedDate: getTodayDate(),
           monthLimitAmount: 0,
