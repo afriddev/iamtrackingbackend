@@ -35,6 +35,7 @@ export async function POST(req: Request) {
                 todayDate: getTodayDate(),
                 lastUpdatedDate: getTodayDate(),
                 balance: Math.floor(userData?.balance - amount),
+                totalSaved:userData?.dailyLimit - totalSpend
               },
               $push: {
                 todaySpends: {
