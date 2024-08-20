@@ -39,14 +39,17 @@ export async function POST(req: Request) {
               },
               $push: {
                 todaySpends: {
-                  amount,
-                  id: new Date().getTime(),
-                  response: inTheLimit
-                    ? REQUEST_SUCCESS
-                    : DAILY_LIMIT_EXCEED_ERROR,
-                  date: format(new Date(), "dd-MM-yyyy"),
-                  type:type === "GROCERY"?"Grocery".toString():"Normal".toString()
-                },
+                  $each:[{
+                    amount,
+                    id: new Date().getTime(),
+                    response: inTheLimit
+                      ? REQUEST_SUCCESS
+                      : DAILY_LIMIT_EXCEED_ERROR,
+                    date: format(new Date(), "dd-MM-yyyy"),
+                    type:type === "GROCERY"?"Grocery".toString():"Normal".toString()
+                  }],
+                  $position: 0
+                }
               },
             }
           );
