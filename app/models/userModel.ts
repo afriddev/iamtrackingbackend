@@ -27,24 +27,28 @@ const userModel = new Schema({
   todayDate: Number,
   lastUpdatedDate: Number,
   monthLimitAmount: Number,
-  todaySpends: [{
-    id:String,
-    amount:Number,
-    date:String,
-    response:String,
-    type:{type:String}
-  }],
+  todaySpends: [
+    {
+      id: String,
+      amount: Number,
+      date: String,
+      response: String,
+      type: { type: String },
+    },
+  ],
   balance: Number,
-  totalSpend:Number,
-  dailyLimit:Number,
-  totalSaved:Number,
-  imageUrl:String,
-  monthlySpends: [{
-    id:String,
-    amount:Number,
-    date:String,
-    response:String
-  }]
+  totalSpend: Number,
+  dailyLimit: Number,
+  totalSaved: Number,
+  imageUrl: String,
+  dailySpends: [
+    {
+      id: String,
+      amount: Number,
+      date: String,
+      response: String,
+    },
+  ],
 });
 const user = models.users || mongoose.model("users", userModel);
 export default user;

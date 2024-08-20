@@ -44,7 +44,7 @@ export async function POST(req: Request) {
                   totalSaved: userData?.dailyLimit - totalSpend,
                 },
                 $push: {
-                  monthlySpends: {
+                  dailySpends: {
                     amount: parseInt(totalSpend as never),
                     id: new Date().getTime()?.toString(),
                     response:
@@ -74,8 +74,8 @@ export async function POST(req: Request) {
           message: NO_USER_FOUND_ERROR,
         });
       }
-    } catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
       return NextResponse.json({
         message: MONGO_DB_ERROR,
       });

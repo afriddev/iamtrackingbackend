@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           firstName,
           lastName: lastName ?? "",
           emailId,
-          password:btoa(password),
+          password: btoa(password),
           todayDate: getTodayDate(),
           lastUpdatedDate: getTodayDate(),
           monthLimitAmount: 0,
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
           dailyLimit: 0,
           totalSaved: 0,
           imageUrl: "",
-          monthlySpends: [],
+          dailySpends: [],
           mobileNumber: mobileNumber ?? "",
         });
         return NextResponse.json({
