@@ -4,6 +4,7 @@ import {
   NO_USER_FOUND_ERROR,
   REQUEST_SUCCESS,
 } from "@/app/errors/errorMessages";
+import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { daysInThisMonth, getTodayDate } from "@/app/utils/utils";
@@ -26,11 +27,22 @@ export async function POST(req: Request) {
             $set: {
               todayDate: getTodayDate(),
               lastUpdatedDate: getTodayDate(),
-              monthLimitAmount: amount,
-              balance: amount,
+              monthLimitAmount: amount * 0.6,
+              balance: amount * 0.6,
               dailyLimit: Math.floor(
-                amount / (daysInThisMonth() - getTodayDate())
+                (amount * 0.6) / (daysInThisMonth() - getTodayDate())
               ),
+            },
+          }
+        );
+        await userGroceryList.updateOne(
+          {
+            emailId,
+          },
+          {
+            $set: {
+              monthLyLimit: amount * 0.4,
+              lastUpdateDate: getTodayDate(),
             },
           }
         );

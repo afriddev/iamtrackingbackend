@@ -8,8 +8,10 @@ import {
   REQUEST_SUCCESS,
   SET_MONTH_AMOUNT_ERROR,
 } from "@/app/errors/errorMessages";
+import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
+import { groceryList } from "@/app/types/groceryTypes";
 import { userType } from "@/app/types/userTypes";
 import { getTodayDate } from "@/app/utils/utils";
 import { format } from "date-fns";
@@ -55,6 +57,46 @@ export async function POST(req: Request) {
                 },
               }
             );
+
+            const userGroceryListData = await userGroceryList?.findOne({
+              emailId,
+            });
+
+            if (
+              userGroceryListData?.groceryList?.length > 0 &&
+              userGroceryListData?.todayDate !== getTodayDate()
+            ) {
+              const temp: groceryList[] = [];
+              for (
+                let index = 0;
+                index < userGroceryListData?.groceryList?.length;
+                index++
+              ) {
+                if (
+                  userGroceryListData?.notifyHalf === true &&
+                  userGroceryListData?.groceryList[index]?.addedDate + 3 ===
+                    getTodayDate()
+                ) {
+                  temp?.push(userGroceryListData?.groceryList[index]);
+                } else if (
+                  userGroceryListData?.notifyHalf === false &&
+                  userGroceryListData?.groceryList[index]?.addedDate + 6 ===
+                    getTodayDate()
+                ) {
+                  temp?.push(userGroceryListData?.groceryList[index]);
+                }
+              }
+
+              await userGroceryList?.updateOne(
+                { emailId },
+                {
+                  $set: {
+                    notifications: temp,
+                  },
+                }
+              );
+            }
+
             return NextResponse.json({
               message: AMOUNT_UPDATED,
             });

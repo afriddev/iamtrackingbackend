@@ -53,11 +53,12 @@ export async function POST(req: Request) {
         await userGroceryList.create({
           emailId,
           groceryList: [],
-          lastUpdateDate: getTodayDate,
-          todayDate: getTodayDate,
+          lastUpdateDate: getTodayDate() - 1,
+          todayDate: getTodayDate() - 1,
           notifications: [],
           monthLyLimit: 0,
-          monthLySpend:0
+          monthLySpend: 0,
+          notifyHalf: true,
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,
