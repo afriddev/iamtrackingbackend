@@ -6,6 +6,7 @@ import {
   REQUEST_SUCCESS,
   USER_EXISTS_ERROR,
 } from "@/app/errors/errorMessages";
+import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { getTodayDate } from "@/app/utils/utils";
@@ -49,6 +50,15 @@ export async function POST(req: Request) {
           dailySpends: [],
           mobileNumber: mobileNumber ?? "",
         });
+        await userGroceryList.create({
+          emailId,
+          groceryList: [],
+          lastUpdateDate: getTodayDate,
+          todayDate: getTodayDate,
+          notifications: [],
+          monthLyLimit: 0,
+          monthLySpend:0
+        });
         return NextResponse.json({
           message: REQUEST_SUCCESS,
         });
@@ -57,7 +67,8 @@ export async function POST(req: Request) {
           message: USER_EXISTS_ERROR,
         });
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       return NextResponse.json({
         message: MONGO_DB_ERROR,
       });

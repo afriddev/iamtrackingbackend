@@ -40,8 +40,7 @@ export async function POST(req: Request) {
                   todayDate: getTodayDate(),
                   lastUpdatedDate: getTodayDate(),
                   totalSpend,
-                  todaySpends: [],
-                  totalSaved: userData?.dailyLimit - totalSpend,
+                  totalSaved: userData?.dailyLimit + userData?.totalSaved,
                 },
                 $push: {
                   dailySpends: {
