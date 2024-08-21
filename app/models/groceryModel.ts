@@ -25,7 +25,7 @@ const groceryModel = new Schema({
   notifications: [groceryListSchema],
   monthLyLimit: Number,
   monthLySpend: Number,
-  notifyHalf:Boolean
+  notifyHalf: Boolean,
 });
 const userGroceryList =
   models.userGroceryList || mongoose.model("userGroceryList", groceryModel);
