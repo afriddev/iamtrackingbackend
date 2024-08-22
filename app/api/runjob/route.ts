@@ -14,7 +14,7 @@ import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { groceryList } from "@/app/types/groceryTypes";
 import { userType } from "@/app/types/userTypes";
 import { getTodayDate } from "@/app/utils/utils";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
             ) {
               totalSpend = totalSpend + userData?.todaySpends[index]?.amount;
             }
+            const prevDay = subDays(new Date(), 1);
             await user.updateOne(
               { emailId },
               {
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
                       totalSpend <= userData?.dailyLimit
                         ? REQUEST_SUCCESS
                         : DAILY_LIMIT_EXCEED_ERROR,
-                    date: format(new Date(), "dd-MM-yyyy")?.toString(),
+                    date: format(prevDay, "dd-MM-yyyy")?.toString(),
                   },
                 },
               }
