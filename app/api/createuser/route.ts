@@ -57,11 +57,12 @@ export async function POST(req: Request) {
           emailId,
           lastUpdateDate: getTodayDate() - 1,
           todayDate: getTodayDate() - 1,
+          notifyHalf: true,
+          monthLyGroceryAmount: 0,
           groceryList: [],
           notifications: [],
-          notifyHalf: true,
-
-          monthLyGroceryAmount: 0,
+          missedGroceryList: [],
+          todayGroceryList: [],
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,

@@ -30,6 +30,7 @@ export async function POST(req: Request) {
             $push: {
               groceryList: { ...groceryData, id: randomId },
               notifications: { ...groceryData, id: randomId },
+              todayGroceryList: { ...groceryData, id: randomId },
             },
           }
         );
