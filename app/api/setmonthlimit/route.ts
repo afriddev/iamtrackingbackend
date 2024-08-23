@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { monthLyCharges, monthLyGroceryAmount, monthLySpends, emailId } =
     await req.json();
-  const totalAmount = monthLyCharges + monthLyGroceryAmount + monthLySpends;
+  const totalAmount = parseInt(monthLyCharges) + parseInt(monthLyGroceryAmount) + parseInt(monthLySpends);
   if (!totalAmount || totalAmount <= 0) {
     return NextResponse.json({
       message: MONTHLY_AMOUNT_ZERO_ERROR,
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
                 totalAmount / (daysInThisMonth() - getTodayDate())
               ),
               monthLyCharges: monthLyCharges,
-              monthLySpends: monthLyCharges,
+              monthLySpends: monthLySpends,
             },
           }
         );
