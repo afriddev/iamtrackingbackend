@@ -11,12 +11,12 @@ import {
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { userType } from "@/app/types/userTypes";
-import { daysInThisMonth, getTodayDate } from "@/app/utils/utils";
+import {getRandomId, getTodayDate } from "@/app/utils/utils";
 import { NextResponse } from "next/server";
 import { format } from "date-fns";
 
 export async function POST(req: Request) {
-  const { amount, emailId,type } = await req.json();
+  const { amount, emailId, type } = await req.json();
   try {
     await connectUsersDB();
     if (emailId && amount > 0) {
@@ -34,22 +34,22 @@ export async function POST(req: Request) {
               $set: {
                 todayDate: getTodayDate(),
                 lastUpdatedDate: getTodayDate(),
-                balance: Math.floor(userData?.balance - amount),
-                totalSaved:userData?.dailyLimit - totalSpend
               },
               $push: {
                 todaySpends: {
-                  $each:[{
-                    amount,
-                    id: new Date().getTime(),
-                    response: inTheLimit
-                      ? REQUEST_SUCCESS
-                      : DAILY_LIMIT_EXCEED_ERROR,
-                    date: format(new Date(), "dd-MM-yyyy"),
-                    type:type === "GROCERY"?"Grocery".toString():"Normal".toString()
-                  }],
-                  $position: 0
-                }
+                  $each: [
+                    {
+                      amount,
+                      id:getRandomId(),
+                      response: inTheLimit
+                        ? REQUEST_SUCCESS
+                        : DAILY_LIMIT_EXCEED_ERROR,
+                      date: format(new Date(), "dd-MM-yyyy"),
+                      type: type?.toString(),
+                    },
+                  ],
+                  $position: 0,
+                },
               },
             }
           );
@@ -81,8 +81,8 @@ export async function POST(req: Request) {
         });
       }
     }
-  } catch(e) {
-    console.log(e)
+  } catch (e) {
+    console.log(e);
     return NextResponse.json({
       message: MONGO_DB_ERROR,
     });

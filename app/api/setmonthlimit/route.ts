@@ -11,8 +11,10 @@ import { daysInThisMonth, getTodayDate } from "@/app/utils/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { amount, emailId } = await req.json();
-  if (!amount || amount <= 0) {
+  const { monthLyCharges, monthLyGroceryAmount, monthLySpends, emailId } =
+    await req.json();
+  const totalAmount = monthLyCharges + monthLyGroceryAmount + monthLySpends;
+  if (!totalAmount || totalAmount <= 0) {
     return NextResponse.json({
       message: MONTHLY_AMOUNT_ZERO_ERROR,
     });
@@ -27,21 +29,23 @@ export async function POST(req: Request) {
             $set: {
               todayDate: getTodayDate(),
               lastUpdatedDate: getTodayDate(),
-              monthLimitAmount: amount * 0.6,
-              balance: amount * 0.6,
+              monthLimitAmount: totalAmount,
               dailyLimit: Math.floor(
-                (amount * 0.6) / (daysInThisMonth() - getTodayDate())
+                totalAmount / (daysInThisMonth() - getTodayDate())
               ),
+              monthLyCharges: monthLyCharges,
+              monthLySpends: monthLyCharges,
             },
           }
         );
+
         await userGroceryList.updateOne(
           {
             emailId,
           },
           {
             $set: {
-              monthLyLimit: amount * 0.4,
+              monthLyGroceryAmount: monthLyGroceryAmount,
               lastUpdateDate: getTodayDate(),
             },
           }

@@ -40,25 +40,28 @@ export async function POST(req: Request) {
           password: btoa(password),
           todayDate: getTodayDate(),
           lastUpdatedDate: getTodayDate(),
+          imageUrl: "",
+          mobileNumber: mobileNumber ?? "",
+
           monthLimitAmount: 0,
           todaySpends: [],
-          balance: 0,
-          totalSpend: 0,
+
           dailyLimit: 0,
-          totalSaved: 0,
-          imageUrl: "",
           dailySpends: [],
-          mobileNumber: mobileNumber ?? "",
+
+          monthLyCharges: 0,
+          monthLyGroceryAmount: 0,
+          monthLySpends: 0,
         });
         await userGroceryList.create({
           emailId,
-          groceryList: [],
           lastUpdateDate: getTodayDate() - 1,
           todayDate: getTodayDate() - 1,
+          groceryList: [],
           notifications: [],
-          monthLyLimit: 0,
-          monthLySpend: 0,
           notifyHalf: true,
+
+          monthLyGroceryAmount: 0,
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,

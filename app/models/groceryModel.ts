@@ -19,13 +19,16 @@ const groceryModel = new Schema({
     immutable: true,
     required: true,
   },
-  groceryList: [groceryListSchema],
   lastUpdateDate: Number,
   todayDate: Number,
+
+  
+  groceryList: [groceryListSchema],
   notifications: [groceryListSchema],
-  monthLyLimit: Number,
-  monthLySpend: Number,
   notifyHalf: Boolean,
+
+
+  monthLyGroceryAmount: Number,
 });
 const userGroceryList =
   models.userGroceryList || mongoose.model("userGroceryList", groceryModel);

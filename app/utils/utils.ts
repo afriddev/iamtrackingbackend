@@ -10,5 +10,8 @@ export function getTodayDate(): number{
 export function useGetMe(){
   const emailId = "369afrid@gmail.com"
   return {emailId}
+}
+export function getRandomId() {
+  return  new Date().getTime()
 
 }

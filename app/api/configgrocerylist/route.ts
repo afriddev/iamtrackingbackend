@@ -6,8 +6,7 @@ import {
 } from "@/app/errors/errorMessages";
 import userGroceryList from "@/app/models/groceryModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
-import { groceryList } from "@/app/types/groceryTypes";
-import { getTodayDate } from "@/app/utils/utils";
+import { getRandomId, getTodayDate } from "@/app/utils/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,6 +19,7 @@ export async function POST(req: Request) {
         message: NO_USER_FOUND_ERROR,
       });
     } else {
+      const randomId = getRandomId();
       if (groceryData) {
         await userGroceryList.updateOne(
           { emailId },
@@ -28,7 +28,8 @@ export async function POST(req: Request) {
               lastUpdateDate: getTodayDate(),
             },
             $push: {
-              groceryList: groceryData,
+              groceryList: { ...groceryData, id: randomId },
+              notifications: { ...groceryData, id: randomId },
             },
           }
         );
