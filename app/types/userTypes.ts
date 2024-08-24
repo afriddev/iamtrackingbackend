@@ -2,22 +2,44 @@ export type userType = {
   emailId: string;
   mobilenumber: number;
   password: string;
-  fisrtName: string;
+  firstName: string;
   lastName?: string;
   todayDate: number;
   lastUpdatedDate: number;
+  imageUrl: string;
   monthLimitAmount: number;
   todaySpends: {
     id: string;
     amount: number;
     response: string;
     date: string;
-    type: "Grocery" | "Normal";
+    type: "Normal" | "Grocery";
   }[];
-  balance: number;
-  totalSpend: number;
   dailyLimit: number;
-  totalSaved: number;
-  imageUrl: string;
-  dailySpends: { id: string; amount: number; response: string; date: string }[];
+  dailySpends: {
+    id: string;
+    amount: number;
+    response: string;
+    date: string;
+  }[];
+  groceryData:groceryData
+};
+
+export type groceryData = {
+  emailId: string;
+  lastUpdateDate: number;
+  todayDate: number;
+  groceryList: [groceryList];
+  notifications: [groceryList];
+  notifyHalf: boolean;
+  monthLyGroceryAmount:number
+  missedGroceryList: [groceryList],
+  todayGroceryList: [groceryList],
+};
+
+export type groceryList = {
+  itemName: string;
+  pricePerKg: number;
+  requiredGmsPerWeek: number;
+  addedDate: number;
 };
