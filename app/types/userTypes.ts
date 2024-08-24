@@ -26,6 +26,7 @@ export type userType = {
   }[];
 
   monthLyCharges: number;
+  dailyChargeLimit:number;
   monthLySpends: number;
 };
 

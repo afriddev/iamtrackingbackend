@@ -51,6 +51,7 @@ const userModel = new Schema({
   
 
   monthLyCharges: Number,
+  dailyChargeLimit:{type:Number},
   monthLySpends: Number,
 
 });

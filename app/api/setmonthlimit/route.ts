@@ -7,13 +7,16 @@ import {
 import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
-import { daysInThisMonth, getTodayDate } from "@/app/utils/utils";
+import { getTotalDaysInMonth, getTodayDate } from "@/app/utils/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const { monthLyCharges, monthLyGroceryAmount, monthLySpends, emailId } =
     await req.json();
-  const totalAmount = parseInt(monthLyCharges) + parseInt(monthLyGroceryAmount) + parseInt(monthLySpends);
+  const totalAmount =
+    parseInt(monthLyCharges) +
+    parseInt(monthLyGroceryAmount) +
+    parseInt(monthLySpends);
   if (!totalAmount || totalAmount <= 0) {
     return NextResponse.json({
       message: MONTHLY_AMOUNT_ZERO_ERROR,
@@ -31,9 +34,10 @@ export async function POST(req: Request) {
               lastUpdatedDate: getTodayDate(),
               monthLimitAmount: totalAmount,
               dailyLimit: Math.floor(
-                totalAmount / (daysInThisMonth() - getTodayDate())
+                totalAmount / (getTotalDaysInMonth() - getTodayDate())
               ),
               monthLyCharges: monthLyCharges,
+              dailyChargeLimit: parseInt((monthLyCharges/22) as unknown as string),
               monthLySpends: monthLySpends,
             },
           }
