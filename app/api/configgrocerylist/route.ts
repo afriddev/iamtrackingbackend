@@ -7,7 +7,6 @@ import {
 import userGroceryList from "@/app/models/groceryModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { getRandomId, getTodayDate } from "@/app/utils/utils";
-import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
