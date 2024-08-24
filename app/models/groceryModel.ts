@@ -26,10 +26,9 @@ const groceryModel = new Schema({
 
   groceryList: [groceryListSchema],
   notifications: [groceryListSchema],
-  
+
   missedGroceryList: [groceryListSchema],
   todayGroceryList: [groceryListSchema],
-  
 });
 const userGroceryList =
   models.userGroceryList || mongoose.model("userGroceryList", groceryModel);
