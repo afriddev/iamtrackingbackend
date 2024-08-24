@@ -11,12 +11,13 @@ const groceryListSchema = new Schema({
     type: Number,
   },
   addedDate: Number,
+  id:String
 });
 
 const groceryModel = new Schema({
   emailId: {
     type: String,
-    immutable: true,
+    immutable: true,  
     required: true,
   },
   lastUpdateDate: Number,

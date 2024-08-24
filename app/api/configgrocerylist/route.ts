@@ -7,10 +7,12 @@ import {
 import userGroceryList from "@/app/models/groceryModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { getRandomId, getTodayDate } from "@/app/utils/utils";
+import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { emailId, groceryData } = await req.json();
+  const { emailId, itemName, pricePerKg, requiredGmsPerWeek } =
+    await req.json();
   try {
     await connectUsersDB();
     const userGroceryData = await userGroceryList.findOne({ emailId });
@@ -20,7 +22,7 @@ export async function POST(req: Request) {
       });
     } else {
       const randomId = getRandomId();
-      if (groceryData) {
+      if (itemName && pricePerKg && requiredGmsPerWeek) {
         await userGroceryList.updateOne(
           { emailId },
           {
@@ -28,9 +30,27 @@ export async function POST(req: Request) {
               lastUpdateDate: getTodayDate(),
             },
             $push: {
-              groceryList: { ...groceryData, id: randomId },
-              notifications: { ...groceryData, id: randomId },
-              todayGroceryList: { ...groceryData, id: randomId },
+              groceryList: {
+                itemName,
+                pricePerKg,
+                requiredGmsPerWeek,
+                addedDate: getTodayDate(),
+                id: randomId,
+              },
+              notifications: {
+                itemName,
+                pricePerKg,
+                requiredGmsPerWeek,
+                addedDate: getTodayDate(),
+                id: randomId,
+              },
+              todayGroceryList: {
+                itemName,
+                pricePerKg,
+                requiredGmsPerWeek,
+                addedDate: getTodayDate(),
+                id: randomId,
+              },
             },
           }
         );
@@ -43,9 +63,9 @@ export async function POST(req: Request) {
         });
       }
     }
-  } catch {
+  } catch (e) {
     return NextResponse.json({
-      messaeg: MONGO_DB_ERROR,
+      messaeg:MONGO_DB_ERROR,
     });
   }
 }
