@@ -30,6 +30,9 @@ const groceryModel = new Schema({
 
   missedGroceryList: [groceryListSchema],
   todayGroceryList: [groceryListSchema],
+  completedgroceryList:[groceryListSchema]
+
+
 });
 const userGroceryList =
   models.userGroceryList || mongoose.model("userGroceryList", groceryModel);

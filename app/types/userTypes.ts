@@ -26,7 +26,7 @@ export type userType = {
   }[];
 
   monthLyCharges: number;
-  dailyChargeLimit:number;
+  dailyChargeLimit: number;
   monthLySpends: number;
 };
 
@@ -43,6 +43,8 @@ export type groceryType = {
 
   missedGroceryList: [groceryListDataType];
   todayGroceryList: [groceryListDataType];
+
+  completedgroceryList: [groceryListDataType];
 };
 
 export type groceryListDataType = {

@@ -63,6 +63,8 @@ export async function POST(req: Request) {
           notifications: [],
           missedGroceryList: [],
           todayGroceryList: [],
+          completedgroceryList:[]
+
         });
         return NextResponse.json({
           message: REQUEST_SUCCESS,

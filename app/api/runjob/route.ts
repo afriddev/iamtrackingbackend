@@ -12,8 +12,8 @@ import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { groceryList } from "@/app/types/groceryTypes";
-import { userType } from "@/app/types/userTypes";
-import { getTodayDate } from "@/app/utils/utils";
+import { groceryType, userType } from "@/app/types/userTypes";
+import { getRandomId, getTodayDate } from "@/app/utils/utils";
 import { format, subDays } from "date-fns";
 import { NextResponse } from "next/server";
 
@@ -24,81 +24,44 @@ export async function POST(req: Request) {
     try {
       await connectUsersDB();
       const userData: userType | null = await user.findOne({ emailId });
+      const userGroceryData: groceryType | null =
+        await userGroceryList?.findOne({
+          emailId,
+        });
       if (userData) {
-        if (userData?.monthLimitAmount) {
+        if (userData?.monthLimitAmount > 0) {
           if (userData?.lastUpdatedDate !== getTodayDate()) {
-            let totalSpend = 0;
+            let totalTodaySpendAmount = 0;
             for (
               let index = 0;
               index < userData?.todaySpends?.length;
               index++
             ) {
-              totalSpend = totalSpend + userData?.todaySpends[index]?.amount;
+              totalTodaySpendAmount =
+                totalTodaySpendAmount + userData?.todaySpends[index]?.amount;
             }
-            const prevDay = subDays(new Date(), 1);
-            await user.updateOne(
-              { emailId },
-              {
-                $set: {
-                  todayDate: getTodayDate(),
-                  lastUpdatedDate: getTodayDate(),
-                  totalSpend,
-                  totalSaved: userData?.dailyLimit + userData?.totalSaved,
-                },
-                $push: {
-                  dailySpends: {
-                    amount: parseInt(totalSpend as never),
-                    id: new Date().getTime()?.toString(),
-                    response:
-                      totalSpend <= userData?.dailyLimit
-                        ? REQUEST_SUCCESS
-                        : DAILY_LIMIT_EXCEED_ERROR,
-                    date: format(prevDay, "dd-MM-yyyy")?.toString(),
-                  },
-                },
-              }
-            );
 
-            const userGroceryListData = await userGroceryList?.findOne({
-              emailId,
+            await user?.updateOne({
+              $push: {
+                dailySpends: {
+                  id: getRandomId(),
+                  response:
+                    totalTodaySpendAmount >= userData?.dailyLimit
+                      ? DAILY_LIMIT_EXCEED_ERROR
+                      : REQUEST_SUCCESS,
+                  amount: totalTodaySpendAmount,
+                  date: getTodayDate(),
+                  type: "",
+                },
+              },
+              $set: {
+                dailySpends: [],
+                todayDate: getTodayDate(),
+                lastUpdatedDate: getTodayDate(),
+              },
             });
 
-            if (
-              userGroceryListData?.groceryList?.length > 0 &&
-              userGroceryListData?.todayDate !== getTodayDate()
-            ) {
-              const temp: groceryList[] = [];
-              for (
-                let index = 0;
-                index < userGroceryListData?.groceryList?.length;
-                index++
-              ) {
-                if (
-                  userGroceryListData?.notifyHalf === true &&
-                  userGroceryListData?.groceryList[index]?.addedDate + 3 ===
-                    getTodayDate()
-                ) {
-                  temp?.push(userGroceryListData?.groceryList[index]);
-                } else if (
-                  userGroceryListData?.notifyHalf === false &&
-                  userGroceryListData?.groceryList[index]?.addedDate + 6 ===
-                    getTodayDate()
-                ) {
-                  temp?.push(userGroceryListData?.groceryList[index]);
-                }
-              }
-
-              await userGroceryList?.updateOne(
-                { emailId },
-                {
-                  $set: {
-                    notifications: temp,
-                  },
-                }
-              );
-            }
-
-            return NextResponse.json({
+            return NextResponse?.json({
               message: AMOUNT_UPDATED,
             });
           } else {
