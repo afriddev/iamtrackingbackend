@@ -14,7 +14,6 @@ import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { groceryList } from "@/app/types/groceryTypes";
 import { groceryType, userType } from "@/app/types/userTypes";
 import { getRandomId, getTodayDate } from "@/app/utils/utils";
-import { format, subDays } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

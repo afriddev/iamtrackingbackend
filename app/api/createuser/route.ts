@@ -6,6 +6,7 @@ import {
   REQUEST_SUCCESS,
   USER_EXISTS_ERROR,
 } from "@/app/errors/errorMessages";
+import allUsersData from "@/app/models/allUserDataMode";
 import userGroceryList from "@/app/models/groceryModel";
 import user from "@/app/models/userModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
