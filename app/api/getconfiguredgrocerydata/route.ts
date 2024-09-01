@@ -17,7 +17,12 @@ export async function POST(req: Request) {
       if (userGroceryData) {
         return NextResponse.json({
           message: REQUEST_SUCCESS,
-          data: userGroceryData?.groceryList,
+          total: userGroceryData?.groceryList,
+          daily:userGroceryData?.todayGroceryList,
+          missed:userGroceryData?.missedGroceryList,
+          completed:userGroceryData?.completedgroceryList
+
+
         });
       } else {
         return NextResponse.json({
