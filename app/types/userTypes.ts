@@ -52,4 +52,5 @@ export type groceryListDataType = {
   pricePerKg: number;
   requiredGmsPerWeek: number;
   addedDate: number;
+  id:string
 };
