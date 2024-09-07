@@ -9,7 +9,6 @@ import userGroceryList from "@/app/models/groceryModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
 import { groceryType } from "@/app/types/userTypes";
 import { NextResponse } from "next/server";
-import { useStyleRegistry } from "styled-jsx";
 
 export async function POST(req: Request) {
   const { emailId, id } = await req.json();
@@ -23,19 +22,30 @@ export async function POST(req: Request) {
 
       if (userGrocerydata) {
         const finalUserGroceryData = userGrocerydata?.todayGroceryList?.filter(
-          (item) => item?.id !== id
+          item => item?.id !== id
         );
 
-        const finaMissedgroceryData = userGrocerydata?.missedGroceryList?.filter(
-          (item) => item?.id !== id
+        const finaMissedGroceryData = userGrocerydata?.missedGroceryList?.filter(
+          item => item?.id !== id
         );
+        const finaDailyGroceryData = userGrocerydata?.todayGroceryList?.filter(
+          item => item?.id !== id
+        );
+        const finalNotificationGroceryData = userGrocerydata?.todayGroceryList?.filter(
+          item => item?.id !== id
+        );
+        
+
+        
 
         await userGroceryList.updateOne(
           { emailId },
           {
             $set: {
-              todayGroceryList: finalUserGroceryData,
-              missedGroceryList: finaMissedgroceryData,
+              groceryList: finalUserGroceryData,
+              missedGroceryList: finaMissedGroceryData,
+              todayGroceryList:finaDailyGroceryData,
+              notifications:finalNotificationGroceryData
             },
           }
         );
