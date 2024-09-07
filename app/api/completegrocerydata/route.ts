@@ -1,4 +1,5 @@
 import {
+  DAILY_LIMIT_EXCEED_ERROR,
   EMAIL_ID_PROVIDE_ERROR,
   ID_PROVIDE_ERROR,
   MONGO_DB_ERROR,
@@ -41,9 +42,31 @@ export async function POST(req: Request) {
           }
         );
 
-        return NextResponse.json({
-          message: REQUEST_SUCCESS,
-        });
+        const response = await fetch(
+          "http://localhost:3000/api/adddailyspend",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              emailId: emailId,
+              amount: todayGroceryData.filter((item) => item?.id === id)[0]
+                .pricePerKg,
+            }),
+          }
+        );
+        const responseMessage = await response.json();
+
+        if (
+          responseMessage?.message === "SUCCESS" ||
+          responseMessage?.message === DAILY_LIMIT_EXCEED_ERROR
+        )
+          return NextResponse.json({
+            message: REQUEST_SUCCESS,
+          });
+        else
+          return NextResponse.json({
+            message: responseMessage?.message,
+            type: "GROCERY",
+          });
       } else {
         return NextResponse.json({
           message: NO_USER_FOUND_ERROR,
