@@ -6,11 +6,12 @@ import {
 } from "@/app/errors/errorMessages";
 import userGroceryList from "@/app/models/groceryModel";
 import { connectUsersDB } from "@/app/mongoDB/users/connectUserDB";
+import { groceryType } from "@/app/types/userTypes";
 import { getRandomId, getTodayDate } from "@/app/utils/utils";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { emailId, itemName, pricePerKg, requiredGmsPerWeek } =
+  const { emailId, itemName, pricePerKg, requiredGmsPerWeek, id } =
     await req.json();
   try {
     await connectUsersDB();
@@ -22,6 +23,34 @@ export async function POST(req: Request) {
     } else {
       const randomId = getRandomId();
       if (itemName && pricePerKg && requiredGmsPerWeek) {
+        if (id) {
+          const userGroceeryData: groceryType = (await userGroceryList.findOne({
+            emailId,
+          })) as never;
+          const finalTotalGroceryList = userGroceeryData?.groceryList.filter(
+            (item) => item?.id !== id
+          );
+          const finalNotificastionGroceryList =
+            userGroceeryData?.notifications.filter((item) => item?.id !== id);
+          const finalTodayGroceryList =
+            userGroceeryData?.todayGroceryList.filter(
+              (item) => item?.id !== id
+            );
+
+          await userGroceryList?.updateOne(
+            {
+              emailId,
+            },
+            {
+              $set: {
+                groceryList: finalTotalGroceryList,
+                todayGroceryList: finalTodayGroceryList,
+                notifications: finalNotificastionGroceryList,
+              },
+            }
+          );
+        }
+
         await userGroceryList.updateOne(
           { emailId },
           {
@@ -34,25 +63,26 @@ export async function POST(req: Request) {
                 pricePerKg,
                 requiredGmsPerWeek,
                 addedDate: getTodayDate(),
-                id: randomId,
+                id: id ?? randomId,
               },
               notifications: {
                 itemName,
                 pricePerKg,
                 requiredGmsPerWeek,
                 addedDate: getTodayDate(),
-                id: randomId,
+                id: id ?? randomId,
               },
               todayGroceryList: {
                 itemName,
                 pricePerKg,
                 requiredGmsPerWeek,
                 addedDate: getTodayDate(),
-                id: randomId,
+                id: id ?? randomId,
               },
             },
           }
         );
+
         return NextResponse.json({
           message: REQUEST_SUCCESS,
         });
@@ -64,7 +94,7 @@ export async function POST(req: Request) {
     }
   } catch (e) {
     return NextResponse.json({
-      messaeg:MONGO_DB_ERROR,
+      messaeg: MONGO_DB_ERROR,
     });
   }
 }
