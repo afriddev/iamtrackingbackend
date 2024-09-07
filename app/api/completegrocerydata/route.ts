@@ -48,8 +48,8 @@ export async function POST(req: Request) {
             method: "POST",
             body: JSON.stringify({
               emailId: emailId,
-              amount: todayGroceryData.filter((item) => item?.id === id)[0]
-                .pricePerKg,
+              amount: todayGroceryData?.filter((item) => item?.id === id)[0]?.pricePerKg,
+              type: "GROCERY",
             }),
           }
         );
@@ -65,7 +65,6 @@ export async function POST(req: Request) {
         else
           return NextResponse.json({
             message: responseMessage?.message,
-            type: "GROCERY",
           });
       } else {
         return NextResponse.json({
