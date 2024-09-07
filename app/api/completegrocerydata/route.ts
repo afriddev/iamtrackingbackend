@@ -34,12 +34,15 @@ export async function POST(req: Request) {
           {
             $set: {
               todayGroceryList: finalTodaygroceryList,
-              completedgroceryList: completedGroceryList,
+            },
+            $push: {
+              completedgroceryList: completedGroceryList[0],
             },
           }
         );
+
         return NextResponse.json({
-          mesasge: REQUEST_SUCCESS,
+          message: REQUEST_SUCCESS,
         });
       } else {
         return NextResponse.json({
