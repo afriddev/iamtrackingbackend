@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         );
 
         const response = await fetch(
-          "http://localhost:3000/api/adddailyspend",
+          "https://dailytrackingapi.vercel.app/api/adddailyspend",
           {
             method: "POST",
             body: JSON.stringify({
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
         if (
           responseMessage?.message === "SUCCESS" ||
-          responseMessage?.message === DAILY_LIMIT_EXCEED_ERROR
+          responseMessage?.message === "DAILY_LIMIT_ERROR"
         )
           return NextResponse.json({
             message: REQUEST_SUCCESS,
